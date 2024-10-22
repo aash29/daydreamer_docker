@@ -2,7 +2,7 @@ FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 
 # Базовые пакеты, а также поддержка X11 и OpenGL
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y python3.10 python3.10-venv python3.10-dev python3-pip build-essential git curl wget cmake libboost-all-dev libglib2.0-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev --no-install-recommends && apt-get clean
+RUN apt-get update && apt-get install -y python3.10 python3.10-venv python3.10-dev python3-pip build-essential git curl wget cmake libboost-all-dev libglib2.0-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev ffmpeg parallel --no-install-recommends && apt-get clean
 
 # Устанавливаем питон либы
 WORKDIR /tmp
@@ -31,7 +31,20 @@ COPY embodied /daydreamer/embodied/
 RUN mv /daydreamer/unitree_sdk/build/robot_interface.cpython-310-x86_64-linux-gnu.so /daydreamer/motion_imitation/
 RUN rm -r /tmp/*
 
-# Для дебага
-RUN apt-get -y install zsh vim python-is-python3 && sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+RUN apt-get -y install ffmpeg parallel
 
-CMD ["/bin/zsh"]
+# Для дебага
+#RUN apt-get -y install zsh vim tmux python-is-python3 && sh -c "$(wget https://raw.githubusercontent.cm/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+#CMD ["/bin/zsh"]
+
+# Копируем скрипт запуска и меняем рабочую директорию
+WORKDIR /daydreamer
+#COPY run.sh /daydreamer/run1.sh
+#COPY run.sh /daydreamer/run2.sh
+COPY run.sh /daydreamer/run.sh
+#RUN chmod 777 /daydreamer/run1.sh
+#RUN chmod 777 /daydreamer/run2.sh
+RUN chmod 777 /daydreamer/run.sh
+
+
+CMD ["/daydreamer/run.sh"]
