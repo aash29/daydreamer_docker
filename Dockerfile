@@ -31,8 +31,6 @@ COPY embodied /daydreamer/embodied/
 RUN mv /daydreamer/unitree_sdk/build/robot_interface.cpython-310-x86_64-linux-gnu.so /daydreamer/motion_imitation/
 RUN rm -r /tmp/*
 
-RUN apt-get -y install ffmpeg parallel
-
 # Для дебага
 #RUN apt-get -y install zsh vim tmux python-is-python3 && sh -c "$(wget https://raw.githubusercontent.cm/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 #CMD ["/bin/zsh"]

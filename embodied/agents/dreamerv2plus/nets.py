@@ -492,66 +492,66 @@ class DistLayer(tfutils.Module):
     raise NotImplementedError(self._dist)
 
 
-# class Conv2D(tfutils.Module):
-#
-#   def __init__(
-#       self, depth, kernel, stride=1, transp=False, act='none', norm='none',
-#       pad='same', bias=True, preact=False):
-#     self._depth = depth
-#     self._kernel = kernel
-#     self._stride = stride
-#     self._pad = pad.upper()
-#     self._transp = transp
-#     self._act = get_act(act)
-#     self._norm = Norm(norm)
-#     self._preact = preact
-#     self._bias = bias
-#
-#   def __call__(self, hidden):
-#     if self._preact:
-#       hidden = self._norm(hidden)
-#       hidden = self._act(hidden)
-#       hidden = self._layer(hidden)
-#     else:
-#       hidden = self._layer(hidden)
-#       hidden = self._norm(hidden)
-#       hidden = self._act(hidden)
-#     return hidden
-#
-#   def _layer(self, x):
-#     if self._transp:
-#       shape = (self._kernel, self._kernel, self._depth, x.shape[-1])
-#       limit = np.sqrt(3.0 / (np.prod(shape[:-2]) * np.mean(shape[-2:])))
-#       winit = np.random.uniform(-limit, limit, shape).astype(np.float32)
-#       kernel = self.get(
-#           'kernel', tf.Variable, winit, dtype=tf.float32, trainable=True)
-#       kernel = tfutils.cast_to_compute(kernel)
-#       if self._pad == 'VALID':
-#         out = tuple(x.shape[:-3]) + (
-#             int(x.shape[-3] * self._stride + self._kernel - 2),
-#             int(x.shape[-2] * self._stride + self._kernel - 2),
-#             self._depth)
-#       if self._pad == 'SAME':
-#         out = tuple(x.shape[:-3]) + (
-#             int(x.shape[-3] * self._stride),
-#             int(x.shape[-2] * self._stride),
-#             self._depth)
-#       x = tf.nn.conv2d_transpose(x, kernel, out, self._stride, self._pad)
-#     else:
-#       shape = (self._kernel, self._kernel, x.shape[-1], self._depth)
-#       limit = np.sqrt(3.0 / np.mean(shape[-2:]))
-#       winit = np.random.uniform(-limit, limit, shape).astype(np.float32)
-#       kernel = self.get(
-#           'kernel', tf.Variable, winit, dtype=tf.float32, trainable=True)
-#       kernel = tfutils.cast_to_compute(kernel)
-#       x = tf.nn.conv2d(x, kernel, self._stride, self._pad)
-#     if self._bias:
-#       bias = self.get(
-#           'bias', tf.Variable, np.zeros(self._depth, np.float32),
-#           trainable=True)
-#       bias = tfutils.cast_to_compute(bias)
-#       x += bias
-#     return x
+class Conv2D(tfutils.Module):
+
+  def __init__(
+      self, depth, kernel, stride=1, transp=False, act='none', norm='none',
+      pad='same', bias=True, preact=False):
+    self._depth = depth
+    self._kernel = kernel
+    self._stride = stride
+    self._pad = pad.upper()
+    self._transp = transp
+    self._act = get_act(act)
+    self._norm = Norm(norm)
+    self._preact = preact
+    self._bias = bias
+
+  def __call__(self, hidden):
+    if self._preact:
+      hidden = self._norm(hidden)
+      hidden = self._act(hidden)
+      hidden = self._layer(hidden)
+    else:
+      hidden = self._layer(hidden)
+      hidden = self._norm(hidden)
+      hidden = self._act(hidden)
+    return hidden
+
+  def _layer(self, x):
+    if self._transp:
+      shape = (self._kernel, self._kernel, self._depth, x.shape[-1])
+      limit = np.sqrt(3.0 / (np.prod(shape[:-2]) * np.mean(shape[-2:])))
+      winit = np.random.uniform(-limit, limit, shape).astype(np.float32)
+      kernel = self.get(
+          'kernel', tf.Variable, winit, dtype=tf.float32, trainable=True)
+      kernel = tfutils.cast_to_compute(kernel)
+      if self._pad == 'VALID':
+        out = tuple(x.shape[:-3]) + (
+            int(x.shape[-3] * self._stride + self._kernel - 2),
+            int(x.shape[-2] * self._stride + self._kernel - 2),
+            self._depth)
+      if self._pad == 'SAME':
+        out = tuple(x.shape[:-3]) + (
+            int(x.shape[-3] * self._stride),
+            int(x.shape[-2] * self._stride),
+            self._depth)
+      x = tf.nn.conv2d_transpose(x, kernel, out, self._stride, self._pad)
+    else:
+      shape = (self._kernel, self._kernel, x.shape[-1], self._depth)
+      limit = np.sqrt(3.0 / np.mean(shape[-2:]))
+      winit = np.random.uniform(-limit, limit, shape).astype(np.float32)
+      kernel = self.get(
+          'kernel', tf.Variable, winit, dtype=tf.float32, trainable=True)
+      kernel = tfutils.cast_to_compute(kernel)
+      x = tf.nn.conv2d(x, kernel, self._stride, self._pad)
+    if self._bias:
+      bias = self.get(
+          'bias', tf.Variable, np.zeros(self._depth, np.float32),
+          trainable=True)
+      bias = tfutils.cast_to_compute(bias)
+      x += bias
+    return x
 
 
 class Linear(tfutils.Module):

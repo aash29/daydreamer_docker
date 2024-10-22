@@ -118,6 +118,55 @@ qfunction:
   pengs_qlambda: False  # True
   return_lambda: 0.5
 
+minecraft:
+
+  task: minecraft_discover
+  train.log_keys_max: '^log_inventory.*'
+  env: {amount: 16, parallel: thread}
+  encoder: {mlp_keys: 'inventory|equipped|reward|is_terminal', cnn_keys: 'image'}
+  decoder: {mlp_keys: 'inventory|equipped', cnn_keys: 'image'}
+  tf.precision: float32
+  train.eval_fill: 1e5
+  train.train_every: 64
+
+dmlab:
+
+  task: dmlab_rooms_collect_good_objects_train
+  encoder: {mlp_keys: 'reward', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  env: {repeat: 4, episodic: False, amount: 16}
+
+atari:
+
+  task: atari_pong
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  env: {gray: True, repeat: 4, amount: 16}
+  train.steps: 5e7
+  train.eval_every: 2.5e5
+
+atari100k:
+
+  task: atari_pong
+  run: train_eval
+  train: {steps: 2e5, eval_every: 1e5, eval_eps: 10}
+  tf.precision: float32
+  env: {gray: True, repeat: 4}
+  env.sticky: False
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  train.train_every: 1
+  train.train_fill: 1000
+
+crafter:
+
+  task: crafter_reward
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  train.log_keys_max: '^log_achievement_.*'
+  train.log_keys_sum: '^log_reward$'
+  train.train_every: 8
+
 dmc_vision:
 
   task: dmc_walker_walk
@@ -162,6 +211,12 @@ loconav_quadruped:
   env.repeat: 2
   train.train_every: 2
 
+hrlgrid:
+
+  task: hrlgrid_16
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+
 a1:
 
    task: a1_sim
@@ -186,6 +241,89 @@ a1:
    train.sync_every: 20
    actor.minstd: 0.1
    actor.unimix: 0.1
+
+xarm:
+
+   task: xarm_dummy
+   run: train
+   encoder: {mlp_keys: 'cartesian|joint|gripper|grasped', cnn_keys: 'image|depth'}
+   decoder: {mlp_keys: 'cartesian|joint|gripper|grasped', cnn_keys: 'image|depth'}
+   batch_size: 32
+   replay_chunk: 32
+   env.amount: 1
+   env.repeat: 1
+   env.parallel: none
+   env.restart: False
+   train.train_every: 4
+   actent.target: 0.4
+   discount: 0.995
+   rssm: {deter: 512, units: 512}  # 1024
+   train.log_every: 100
+   train.eval_every: 20
+   train.sync_every: 20
+   actor.minstd: 0.1
+   actor.unimix: 0.1
+   train.log_keys_video: [image, depth]
+   env.resets: True
+   env.length: 100
+   train.train_fill: 2000
+
+ur5:
+
+   task: ur5_dummy
+   run: train
+   encoder: {mlp_keys: 'cartesian|joint|gripper|grasped', cnn_keys: 'image'}
+   decoder: {mlp_keys: 'cartesian|joint|gripper|grasped', cnn_keys: 'image'}
+   batch_size: 32
+   replay_chunk: 32
+   env.amount: 1
+   env.repeat: 1
+   env.parallel: none
+   env.restart: False
+   train.train_every: 4
+   actent.target: 0.4
+   discount: 0.995
+   rssm: {deter: 512, units: 512}  # 1024
+   train.log_every: 100
+   train.eval_every: 20
+   train.sync_every: 20
+   actor.minstd: 0.1
+   actor.unimix: 0.1
+   train.log_keys_video: [image, depth]
+   env.resets: True
+   env.length: 100
+   train.train_fill: 2000
+
+sphero:
+
+   task: sphero_dummy
+   run: train
+   encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+   decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+   batch_size: 32
+   replay_chunk: 32
+   env.amount: 1
+   env.repeat: 1
+   env.parallel: none
+   env.restart: True
+   train.train_every: 4
+   actent.target: 0.4
+   discount: 0.995
+   rssm: {deter: 512, units: 512}  # 1024
+   train.log_every: 100
+   train.eval_every: 20
+   train.sync_every: 20
+   actor.minstd: 0.1
+   actor.unimix: 0.1
+   train.log_keys_video: [image]
+   train.log_keys_sum: '^log_.*'
+   train.log_keys_mean: '^log_.*'
+   train.log_zeros: True
+   train.log_keys_max: '^log_.*'
+
+   env.resets: True
+   env.length: 100
+   train.train_fill: 1000
 
 plan2explore:
 

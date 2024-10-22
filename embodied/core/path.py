@@ -23,12 +23,9 @@ class Path:
 
   def __init__(self, path):
     assert isinstance(path, str)
-    # Удаляем ведущую точку или точку слеш (в начале)
-    path = re.sub(r'^\./*', '', path)
-    # Удаляет одинарную косую черту в конце.
-    path = re.sub(r'(?<=[^/])/$', '', path)
-    # Пустой путь обозначен точкой.
-    path = path or '.'
+    path = re.sub(r'^\./*', '', path)  # Remove leading dot or dot slashes.
+    path = re.sub(r'(?<=[^/])/$', '', path)  # Remove single trailing slash.
+    path = path or '.'  # Empty path is represented by a dot.
     self._path = path
 
   def __truediv__(self, part):
