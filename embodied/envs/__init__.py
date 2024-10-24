@@ -46,6 +46,9 @@ def load_single_env(
   elif suite == 'a1':
     assert size == (64, 64), size
     env = A1(task, repeat, length or 1000, True)
+  elif suite == 'go1':
+    assert size == (64, 64), size
+    env = A1(task, repeat, length or 1000, True)    
   elif suite == 'xarm':
     assert size == (64, 64), size
     # from .xarm import XArm
