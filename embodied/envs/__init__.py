@@ -12,6 +12,7 @@ from .hrlgrid import HRLGrid
 from .loconav import LocoNav
 from .minecraft import Minecraft
 from .a1 import A1
+from .go1 import go1
 
 
 def load_env(
@@ -48,7 +49,7 @@ def load_single_env(
     env = A1(task, repeat, length or 1000, True)
   elif suite == 'go1':
     assert size == (64, 64), size
-    env = A1(task, repeat, length or 1000, True)    
+    env = go1(task, repeat, length or 1000, True)    
   elif suite == 'xarm':
     assert size == (64, 64), size
     # from .xarm import XArm
