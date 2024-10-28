@@ -1,7 +1,7 @@
 """A simple locomotion task."""
 import numpy as np
 
-from motion_imitation.robots import a1
+from motion_imitation.robots import go1
 
 class RMATask(object):
   def __init__(self, des_forward_speed=0.3):
@@ -34,9 +34,9 @@ class RMATask(object):
     return np.array([self.curr_rot_mat[2], self.curr_rot_mat[5], self.curr_rot_mat[8]])
 
   def reward(self, env):
-    normed_actions = a1.normalize_action(self._env.robot.GetTrueMotorAngles())
-    deviations = np.abs(normed_actions - a1.STANDING_POSE)
-    worst = np.maximum(1 - a1.STANDING_POSE, 1 + a1.STANDING_POSE)
+    normed_actions = go1.normalize_action(self._env.robot.GetTrueMotorAngles())
+    deviations = np.abs(normed_actions - go1.STANDING_POSE)
+    worst = np.maximum(1 - go1.STANDING_POSE, 1 + go1.STANDING_POSE)
     deviations = np.clip(deviations / worst, 0, 1)  # Map to [0, 1]
     r_upr =  np.dot([0, 0, 1], self.compute_up_dir()) / 2 + 0.5
     r_hip = (r_upr > 0.7) * (1 - deviations[0::3].mean())

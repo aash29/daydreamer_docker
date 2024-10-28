@@ -17,3 +17,10 @@ register(
     max_episode_steps=2000,
     reward_threshold=2000.0,
 )
+
+register(
+    env_id='go1GymEnv-v1',
+    entry_point='locomotion.envs.gym_envs:go1GymEnv',
+    max_episode_steps=2000,
+    reward_threshold=2000.0,
+)

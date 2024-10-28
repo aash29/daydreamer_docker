@@ -395,7 +395,7 @@ class LocomotionGymEnv(gym.Env):
         viewMatrix=view_matrix,
         projectionMatrix=proj_matrix)
     rgb_array = np.array(px).astype(np.uint8)
-    #rgb_array = rgb_array[:, :, :3]
+    rgb_array = rgb_array[:, :, :3]
     return rgb_array
 
   def get_ground(self):

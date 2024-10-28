@@ -50,14 +50,14 @@ def build_env(enable_rendering=False,
 
   if use_real_robot or realistic_sim:
     robot_kwargs["reset_func_name"] = "_SafeJointsReset"
-    robot_kwargs["velocity_source"] = a1.VelocitySource.IMU_FOOT_CONTACT
+    robot_kwargs["velocity_source"] = go1.VelocitySource.IMU_FOOT_CONTACT
   else:
     robot_kwargs["reset_func_name"] = "_PybulletReset"
-  num_motors = a1.NUM_MOTORS
+  num_motors = go1.NUM_MOTORS
   # traj_gen = simple_openloop.A1PoseOffsetGenerator(
   #     action_limit=np.array([0.802851455917, 4.18879020479, -0.916297857297] *
   #                           4) - np.array([0, 0.9, -1.8] * 4))
-  traj_gen = simple_openloop.A1PoseOffsetGenerator(
+  traj_gen = simple_openloop.go1PoseOffsetGenerator(
       action_limit=np.array([1.8, 1.8, 1.8] * 4))
 
   sensors = [

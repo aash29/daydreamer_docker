@@ -33,6 +33,7 @@ class go1(embodied.Env):
   def step(self, action):
     obs = self._env.step(action)
     obs['image'] = self._gymenv.render('rgb_array')
+    print(obs['image'])
     assert obs['image'].shape == (64, 64, 3), obs['image'].shape
     assert obs['image'].dtype == np.uint8, obs['image'].dtype
     return obs
